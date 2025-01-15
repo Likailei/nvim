@@ -71,6 +71,8 @@ lazy.setup({
   {'nvim-lualine/lualine.nvim',
     dependencies = {'nvim-tree/nvim-web-devicons'}
   },
+  {'hrsh7th/nvim-cmp'},
+  {'hrsh7th/cmp-nvim-lsp'},
   {'nvim-treesitter/nvim-treesitter'},
   {'nvim-tree/nvim-tree.lua'},
   {
@@ -179,3 +181,10 @@ vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
 require('lualine').setup(
   {theme = 'everforest'}
 )
+
+require'cmp'.setup{
+  source = {
+    {name = 'nvim_lsp'}
+  }
+}
+
