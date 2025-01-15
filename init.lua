@@ -68,7 +68,9 @@ lazy.opts = {}
 lazy.setup({
   {'folke/tokyonight.nvim'},
   {'folke/which-key.nvim'},
-  --{'neovim/nvim-lspconfig'},
+  {'nvim-lualine/lualine.nvim',
+    dependencies = {'nvim-tree/nvim-web-devicons'}
+  },
   {'nvim-treesitter/nvim-treesitter'},
   {'nvim-tree/nvim-tree.lua'},
   {
@@ -173,3 +175,7 @@ vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find exis
 
 require("nvim-tree").setup()
 vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
+
+require('lualine').setup(
+  {theme = 'everforest'}
+)
