@@ -1,12 +1,14 @@
 vim.g.mapleader = ','
+vim.g.floaterm_shell = 'pwsh'
 
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.hlsearch = false
-vim.o.tabstop = 2
-vim.o.shiftwidth = 2
+vim.o.expandtab = true
+vim.o.tabstop = 4 
+vim.o.shiftwidth = 4 
 vim.o.expandtab = true
 vim.o.showmode = false
 vim.o.termguicolors = true
@@ -19,8 +21,8 @@ vim.o.smartcase = true
 vim.o.clipboard = "unnamedplus"
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.foldmethod = "indent"
 
--- Basic clipboard interaction
 vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', { desc = 'Copy to clipboard' })
 vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', { desc = 'Paste clipboard content' })
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
@@ -30,9 +32,9 @@ vim.keymap.set('n', '<leader>q', '<cmd>q<CR>', { desc = 'Quit fast' })
 vim.keymap.set('n', '<leader>w', '<cmd>wq<CR>', { desc = 'Save and quit fast' })
 vim.keymap.set('n', '<C-j>', 'ddp', { desc = 'Move line down' })
 vim.keymap.set('n', '<C-k>', 'ddkP', { desc = 'Move line up' })
+vim.keymap.set('n', '<leader>t', ':FloatermToggle!<CR>', { desc = 'Toggle popup terminal'})
+vim.keymap.set('t', '<leader>t', '<C-\\><C-n>:FloatermToggle<CR>', { desc = 'Toggle popup terminal'})
 
--- Neovim v0.11 is still under development
--- we will use this to enable certain features
 local is_v11 = vim.fn.has('nvim-0.11') == 1
 
 local lazy = {}
@@ -68,6 +70,7 @@ lazy.opts = {}
 lazy.setup({
   {'folke/tokyonight.nvim'},
   {'folke/which-key.nvim'},
+  {'voldikss/vim-floaterm'},
   {'nvim-lualine/lualine.nvim',
     dependencies = {'nvim-tree/nvim-web-devicons'}
   },
@@ -121,8 +124,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client_id = vim.tbl_get(event, 'data', 'client_id')
     local client = client_id and vim.lsp.get_client_by_id(client_id)
 
-    -- enable completion side effects (if possible)
-    -- note is only available in neovim v0.11 or greater
     if is_v11 and client and client.supports_method('textDocument/completion') then
       vim.lsp.completion.enable(true, client_id, event.buf, {})
     end
@@ -175,16 +176,15 @@ vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' }
 vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
-require("nvim-tree").setup()
+require('nvim-tree').setup()
 vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
 
 require('lualine').setup(
   {theme = 'everforest'}
 )
 
-require'cmp'.setup{
+require('cmp').setup{
   source = {
     {name = 'nvim_lsp'}
   }
 }
-
